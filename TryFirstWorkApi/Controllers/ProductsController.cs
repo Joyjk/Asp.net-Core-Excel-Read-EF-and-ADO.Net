@@ -113,31 +113,34 @@ namespace TryFirstWorkApi.Controllers
                     var rowcount = worksheet.Dimension.Rows;
                     for (int i = 2; i <= rowcount; i++)
                     {
-                        list.Add(new Product
+                        if (!getBarCodeByID(worksheet.Cells[i, 2].Value.ToString().Trim()))
                         {
-                            Chalan = worksheet.Cells[i, 1].Value.ToString().Trim(),
-                            BarCode = worksheet.Cells[i, 2].Value.ToString().Trim(),
+                            list.Add(new Product
+                            {
+                                Chalan = worksheet.Cells[i, 1].Value.ToString().Trim(),
+                                BarCode = worksheet.Cells[i, 2].Value.ToString().Trim(),
 
-                            //Date = Convert.ToDateTime( worksheet.Cells[i, 3].Value.ToString()),
-                            //Date = DateTime.Now.ToString(),
-                            //Date = DateTime.FromOADate( worksheet.Cells[i, 3].Value.ToString().ToString()),
-                            Date = DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())),
+                                //Date = Convert.ToDateTime( worksheet.Cells[i, 3].Value.ToString()),
+                                //Date = DateTime.Now.ToString(),
+                                //Date = DateTime.FromOADate( worksheet.Cells[i, 3].Value.ToString().ToString()),
+                                Date = DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())),
 
-                            Price = Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString().Trim()),
-                            Quantity = Convert.ToInt32((worksheet.Cells[i, 5].Value.ToString()).Trim()),
-                            VendorCode = worksheet.Cells[i, 6].Value.ToString().Trim(),
-                            StoreCode = worksheet.Cells[i, 7].Value.ToString().Trim()
+                                Price = Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString().Trim()),
+                                Quantity = Convert.ToInt32((worksheet.Cells[i, 5].Value.ToString()).Trim()),
+                                VendorCode = worksheet.Cells[i, 6].Value.ToString().Trim(),
+                                StoreCode = worksheet.Cells[i, 7].Value.ToString().Trim()
 
 
-                        });
-                       
-                        SqlCommand sqlCommand = new SqlCommand("Insert into Products (Chalan,BarCode,Date,Price,Quantity,VendorCode,StoreCode) " +
-                            "values ('" + worksheet.Cells[i, 1].Value.ToString().Trim() + "','" + worksheet.Cells[i, 2].Value.ToString().Trim() 
-                            + "','" + DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())) + "'," +
-                            Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString().Trim()) + ", " + Convert.ToInt32((worksheet.Cells[i, 5].Value.ToString()).Trim()) + " ,'"
-                            + worksheet.Cells[i, 6].Value.ToString().Trim() + "','" + worksheet.Cells[i, 7].Value.ToString().Trim() + "')",connection);
-                        
-                        sqlCommand.ExecuteNonQuery();
+                            });
+
+                            SqlCommand sqlCommand = new SqlCommand("Insert into Products (Chalan,BarCode,Date,Price,Quantity,VendorCode,StoreCode) " +
+                                "values ('" + worksheet.Cells[i, 1].Value.ToString().Trim() + "','" + worksheet.Cells[i, 2].Value.ToString().Trim()
+                                + "','" + DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())) + "'," +
+                                Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString().Trim()) + ", " + Convert.ToInt32((worksheet.Cells[i, 5].Value.ToString()).Trim()) + " ,'"
+                                + worksheet.Cells[i, 6].Value.ToString().Trim() + "','" + worksheet.Cells[i, 7].Value.ToString().Trim() + "')", connection);
+
+                            sqlCommand.ExecuteNonQuery();
+                        }
                        
                     }
 
