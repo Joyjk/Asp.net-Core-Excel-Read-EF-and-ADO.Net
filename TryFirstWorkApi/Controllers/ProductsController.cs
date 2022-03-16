@@ -13,6 +13,7 @@ using TryFirstWorkApi.Models;
 using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Bogus;
 
 namespace TryFirstWorkApi.Controllers
 {
@@ -52,6 +53,11 @@ namespace TryFirstWorkApi.Controllers
            // var result = dbContext.Products.Where(x => x.BarCode.Equals(id));
             var result1 = dbContext.Products.Any(c => c.BarCode.ToLower().Contains((id.ToLower())));
             return result1;
+        }
+
+        private bool getChalanByID(string id)
+        {
+            return dbContext.Products.Any(c => c.Chalan.ToLower().Contains((id.ToLower())));
         }
 
         private List<Product> LoadFromAdoDb()
@@ -121,9 +127,9 @@ namespace TryFirstWorkApi.Controllers
                                 BarCode = worksheet.Cells[i, 2].Value.ToString().Trim(),
 
                                 //Date = Convert.ToDateTime( worksheet.Cells[i, 3].Value.ToString()),
-                                //Date = DateTime.Now.ToString(),
+                                Date = DateTime.Now,
                                 //Date = DateTime.FromOADate( worksheet.Cells[i, 3].Value.ToString().ToString()),
-                                Date = DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())),
+                               // Date = DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())),
 
                                 Price = Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString().Trim()),
                                 Quantity = Convert.ToInt32((worksheet.Cells[i, 5].Value.ToString()).Trim()),
@@ -135,7 +141,11 @@ namespace TryFirstWorkApi.Controllers
 
                             SqlCommand sqlCommand = new SqlCommand("Insert into Products (Chalan,BarCode,Date,Price,Quantity,VendorCode,StoreCode) " +
                                 "values ('" + worksheet.Cells[i, 1].Value.ToString().Trim() + "','" + worksheet.Cells[i, 2].Value.ToString().Trim()
-                                + "','" + DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())) + "'," +
+                                + "','" +
+                                
+                                //DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString()))
+                              DateTime.Now
+                                + "'," +
                                 Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString().Trim()) + ", " + Convert.ToInt32((worksheet.Cells[i, 5].Value.ToString()).Trim()) + " ,'"
                                 + worksheet.Cells[i, 6].Value.ToString().Trim() + "','" + worksheet.Cells[i, 7].Value.ToString().Trim() + "')", connection);
 
@@ -176,9 +186,10 @@ namespace TryFirstWorkApi.Controllers
                                 BarCode = worksheet.Cells[i, 2].Value.ToString().Trim(),
 
                                 //Date = Convert.ToDateTime( worksheet.Cells[i, 3].Value.ToString()),
-                                //Date = DateTime.Now.ToString(),
+                                Date = DateTime.Now,
                                 //Date = DateTime.FromOADate( worksheet.Cells[i, 3].Value.ToString().ToString()),
-                                Date = DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())),
+
+                               // Date = DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())),
 
                                 Price = Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString().Trim()),
                                 Quantity = Convert.ToInt32((worksheet.Cells[i, 5].Value.ToString()).Trim()),
@@ -199,6 +210,27 @@ namespace TryFirstWorkApi.Controllers
 
             return list;
 
+        }
+
+        [HttpGet("faker")]
+        public ActionResult Faker()
+        {
+            var fakeData = new Faker<Product>()
+                .RuleFor(x => x.BarCode, f => f.Lorem.Word())
+                .RuleFor(x => x.Chalan, f => f.Lorem.Word())
+                .RuleFor(x => x.Date, f => f.Date.Past())
+                .RuleFor(x => x.Price, f => f.Finance.Amount())
+                .RuleFor(x => x.Quantity, f => f.Random.Number(1, 50))
+                .RuleFor(x => x.VendorCode, f => f.Lorem.Word())
+                .RuleFor(x => x.StoreCode, f => f.Lorem.Word());
+
+
+            var details = fakeData.Generate(5000);
+
+            dbContext.Products.AddRange(details);
+            dbContext.SaveChanges();
+
+            return Ok(details);
         }
     }
 }
