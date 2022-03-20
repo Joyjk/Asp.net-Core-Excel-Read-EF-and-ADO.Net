@@ -14,6 +14,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Bogus;
+using FIK.DAL;
 
 namespace TryFirstWorkApi.Controllers
 {
@@ -21,6 +22,11 @@ namespace TryFirstWorkApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        //FIK.DAL
+        SQL _sqlDal = null;
+        //CompositeModel composite = new CompositeModel();
+        string msg = "";
+
         private readonly ILogger logger;
         private readonly ApplicationDbContext dbContext;
         private readonly IConfiguration configuration;
@@ -30,8 +36,17 @@ namespace TryFirstWorkApi.Controllers
             this.logger = logger;
             this.dbContext = dbContext;
             this.configuration = configuration;
+            _sqlDal = new SQL(configuration.GetConnectionString("DefaultConnection"));
         }
-
+        /// <summary>
+        /// Return Excel file data from SQL Server
+        /// </summary>
+        /// <returns>Excel file data from SQL Server</returns>
+        /// <remarks>
+        ///  Api Request 
+        ///  
+        /// GET /api/products
+        /// </remarks>
 
         [HttpGet]
         public IActionResult Get()
@@ -206,6 +221,56 @@ namespace TryFirstWorkApi.Controllers
                 }
              dbContext.Products.AddRange(list);
             await dbContext.SaveChangesAsync();
+
+
+            return list;
+
+        }
+
+        [HttpPost("FIKDALImport")]
+        public async Task<List<Product>> FIKDALImport(IFormFile file)
+        {
+            var list = new List<Product>();
+
+            using (var stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream);
+                using (var package = new ExcelPackage(stream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    var rowcount = worksheet.Dimension.Rows;
+                    for (int i = 2; i <= rowcount; i++)
+                    {
+                        //if (!getBarCodeByID(worksheet.Cells[i, 2].Value.ToString().Trim()))
+                        {
+                            list.Add(new Product
+                            {
+                                Chalan = worksheet.Cells[i, 1].Value.ToString().Trim(),
+                                BarCode = worksheet.Cells[i, 2].Value.ToString().Trim(),
+
+                                //Date = Convert.ToDateTime( worksheet.Cells[i, 3].Value.ToString()),
+                                Date = DateTime.Now,
+                                //Date = DateTime.FromOADate( worksheet.Cells[i, 3].Value.ToString().ToString()),
+
+                                // Date = DateTime.FromOADate(double.Parse((worksheet.Cells[i, 3] as ExcelRange).Value.ToString())),
+
+                                Price = Convert.ToDecimal(worksheet.Cells[i, 4].Value.ToString().Trim()),
+                                Quantity = Convert.ToInt32((worksheet.Cells[i, 5].Value.ToString()).Trim()),
+                                VendorCode = worksheet.Cells[i, 6].Value.ToString().Trim(),
+                                StoreCode = worksheet.Cells[i, 7].Value.ToString().Trim()
+
+
+                            });
+                        }
+
+                    }
+
+                }
+            }
+
+            _sqlDal.Insert<Product>(list, "", "Id", "Products", ref msg);
+            //dbContext.Products.AddRange(list);
+            //await dbContext.SaveChangesAsync();
 
 
             return list;
