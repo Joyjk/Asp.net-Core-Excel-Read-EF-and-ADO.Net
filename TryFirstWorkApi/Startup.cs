@@ -40,6 +40,8 @@ namespace TryFirstWorkApi
 
             services.AddCors(options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin()));
 
+            services.AddHttpContextAccessor();
+
             services.AddSwaggerGen(s =>
             {
                 s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo {
@@ -74,6 +76,8 @@ namespace TryFirstWorkApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 

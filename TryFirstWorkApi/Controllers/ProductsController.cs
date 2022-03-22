@@ -15,6 +15,7 @@ using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Bogus;
 using FIK.DAL;
+using FIK.DAL.Core;
 
 namespace TryFirstWorkApi.Controllers
 {
