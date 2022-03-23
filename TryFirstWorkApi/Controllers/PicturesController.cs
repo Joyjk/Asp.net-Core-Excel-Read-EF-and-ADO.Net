@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using TryFirstWorkApi.Models;
 
@@ -66,6 +67,9 @@ namespace TryFirstWorkApi.Controllers
             }
             return "uploaded";
         }
+        int time = 3000;
+
+
         [HttpGet("{fileName}")]
         public async Task<IActionResult> Get([FromRoute] string fileName)
         {
@@ -73,11 +77,15 @@ namespace TryFirstWorkApi.Controllers
             var filePath = path + fileName + ".jpg";
             if(System.IO.File.Exists(filePath))
             {
+                Thread.Sleep(new Random().Next(1,7)*1000);
+
+                //time = time + 5000;
                 byte[] b = System.IO.File.ReadAllBytes(filePath);
                 return File(b, "image/jpg");
             }
             return NoContent();
         }
+       
         [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
@@ -87,11 +95,17 @@ namespace TryFirstWorkApi.Controllers
             
             List<string> fileNames = new List<string>();
 
+
+
             foreach (var item in filePaths)
             {
                 fileNames.Add(Path.GetFileName(item));
 
             }
+
+            
+
+
             string path = webHostEnvironment.WebRootPath + "\\uploads\\";
             
             foreach (var item in fileNames)
@@ -101,7 +115,7 @@ namespace TryFirstWorkApi.Controllers
                 {
                     byte[] b = System.IO.File.ReadAllBytes(filePath);
 
-                    pictureList.Add(new Picture() { Title = item, Pic = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}" + "/uploads/"+item });
+                    pictureList.Add(new Picture() { Title = item.Split('.')[0], Pic = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}" + "/uploads/"+item });
 
                     //return File(b, "image/jpg");
                 }
@@ -109,7 +123,11 @@ namespace TryFirstWorkApi.Controllers
 
             var currentUrl = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}"+"/uploads/";
 
+            
+
+            
             return Ok(pictureList);
+
         }
 
         //public async Task<IActionResult> Create(Picture picture)
