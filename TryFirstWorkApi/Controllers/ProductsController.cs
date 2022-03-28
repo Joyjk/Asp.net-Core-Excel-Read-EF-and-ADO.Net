@@ -32,7 +32,13 @@ namespace TryFirstWorkApi.Controllers
         private readonly ApplicationDbContext dbContext;
         private readonly IConfiguration configuration;
 
+        //public ProductsController(ApplicationDbContext dbContext)
+        //{
+        //    this.dbContext = dbContext;
+        //}
+
         public ProductsController(ILogger<Product> logger, ApplicationDbContext dbContext, IConfiguration configuration)
+        //public ProductsController( ApplicationDbContext dbContext)
         {
             this.logger = logger;
             this.dbContext = dbContext;

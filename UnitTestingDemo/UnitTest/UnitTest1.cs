@@ -1,6 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using System;
+using System.Net.Http;
+using TryFirstWorkApi.Models;
 using TryFirstWorkApi.Testing;
 
 namespace UnitTestingDemo
@@ -58,23 +61,42 @@ namespace UnitTestingDemo
         [TestMethod]
         public void TestMethod2()
         {
-            Account origin = new Account() { Funds =10};
-            Account destination = new Account() { Funds =5};
-            decimal amountToTransefer = 7m;
+            //Account origin = new Account() { Funds =10};
+            //Account destination = new Account() { Funds =5};
+            //decimal amountToTransefer = 7m;
 
 
 
-            var mockValidateWireTransfer = new Mock<IValidateWireTransfer>();
-            mockValidateWireTransfer.Setup(x => x.validate(origin, destination, amountToTransefer))
-                .Returns(new OperationResult(true));
+            //var mockValidateWireTransfer = new Mock<IValidateWireTransfer>();
+            //mockValidateWireTransfer.Setup(x => x.validate(origin, destination, amountToTransefer))
+            //    .Returns(new OperationResult(true));
 
-            var service = new TransferService(mockValidateWireTransfer.Object);
+            //var service = new TransferService(mockValidateWireTransfer.Object);
 
-            //Testing
-            service.WireTransfer(origin,destination, amountToTransefer);
-            //verification
-            Assert.AreEqual(3,origin.Funds);
-            Assert.AreEqual(12,destination.Funds);
+            ////Testing
+            //service.WireTransfer(origin,destination, amountToTransefer);
+            ////verification
+            //Assert.AreEqual(3,origin.Funds);
+            //Assert.AreEqual(12,destination.Funds);
+
+
+
+            var apiUrl = "http://localhost:11793/api/products/";
+            using (var client = new HttpClient())
+            {
+                using (var response = client.GetAsync(apiUrl))
+                {
+                    //object data = response.Result.Content.ReadAsStringAsync<Product>.Result;
+
+                    //Product product =  JsonConvert.DeserializeObject<Product>(data);
+
+                   
+                    
+
+
+                   // Assert.AreEqual(data, "acv");
+                }
+            }
 
 
         }
