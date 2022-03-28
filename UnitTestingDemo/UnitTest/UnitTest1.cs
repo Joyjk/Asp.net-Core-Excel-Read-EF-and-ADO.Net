@@ -93,12 +93,12 @@ namespace UnitTestingDemo
                 {
                     string data = response.Result.Content.ReadAsStringAsync().Result;
 
-                    var product =  JsonConvert.DeserializeObject<List<Product>>(data);
+                    var products =  JsonConvert.DeserializeObject<List<Product>>(data);
 
                    // Assert.AreEqual(5008, product.Count);
 
                     int count = 0;
-                    foreach (var item in product)
+                    foreach (var item in products)
                     {
                         if(item.BarCode == "n1ihil")
                         {
