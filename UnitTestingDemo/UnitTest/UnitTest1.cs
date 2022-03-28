@@ -2,6 +2,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using TryFirstWorkApi.Models;
 using TryFirstWorkApi.Testing;
@@ -61,6 +64,8 @@ namespace UnitTestingDemo
         [TestMethod]
         public void TestMethod2()
         {
+
+            #region Other:
             //Account origin = new Account() { Funds =10};
             //Account destination = new Account() { Funds =5};
             //decimal amountToTransefer = 7m;
@@ -78,7 +83,7 @@ namespace UnitTestingDemo
             ////verification
             //Assert.AreEqual(3,origin.Funds);
             //Assert.AreEqual(12,destination.Funds);
-
+            #endregion
 
 
             var apiUrl = "http://localhost:11793/api/products/";
@@ -86,19 +91,42 @@ namespace UnitTestingDemo
             {
                 using (var response = client.GetAsync(apiUrl))
                 {
-                    //object data = response.Result.Content.ReadAsStringAsync<Product>.Result;
+                    string data = response.Result.Content.ReadAsStringAsync().Result;
 
-                    //Product product =  JsonConvert.DeserializeObject<Product>(data);
+                    var product =  JsonConvert.DeserializeObject<List<Product>>(data);
+
+                    Assert.AreEqual(5008, product.Count);
+                    
 
                    
                     
 
 
-                   // Assert.AreEqual(data, "acv");
+                    //Assert.AreEqual(product, "acv");
                 }
             }
 
 
         }
+
+        //[TestMethod]
+        //public void getInvItemsCount()
+        //{
+        //    int recCount = 0;
+        //   string uri = "http://localhost:11793/api/products/";
+        //    var webRequest = (HttpWebRequest)WebRequest.Create(uri);
+        //    webRequest.Method = "GET";
+        //    using (var webResponse = (HttpWebResponse)webRequest.GetResponse())
+        //    {
+        //        if (webResponse.StatusCode == HttpStatusCode.OK)
+        //        {
+        //            var reader = new StreamReader(webResponse.GetResponseStream());
+        //            string s = reader.ReadToEnd();
+        //            Int32.TryParse(s, out recCount);
+        //        }
+        //    }
+             
+        //    Assert.AreEqual(recCount, 5);
+        //}
     }
 }

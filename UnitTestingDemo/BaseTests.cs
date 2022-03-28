@@ -22,15 +22,15 @@ namespace UnitTestingDemo
             return dbContext;
         }
 
-        protected IMapper BuildMap()
-        {
-            var config = new MapperConfiguration(options =>
-            {
-                options.AddProfile(new AutoMapperProfile());
-            });
+        //protected IMapper BuildMap()
+        //{
+        //    var config = new MapperConfiguration(options =>
+        //    {
+        //        options.AddProfile(new AutoMapperProfile());
+        //    });
 
-            return config.CreateMapper();
-        }
+        //    return config.CreateMapper();
+        //}
        
     }
 }
