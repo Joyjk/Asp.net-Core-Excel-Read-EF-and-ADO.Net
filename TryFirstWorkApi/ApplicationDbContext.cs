@@ -13,7 +13,7 @@ namespace TryFirstWorkApi
         }
         //DESKTOP-B823G98\SQLEXPRESS
         public DbSet<Product> Products { get; set; }
-        public DbSet<Picture> Pictures { get; set; }
+       // public DbSet<Picture> Pictures { get; set; }
 
         
     }

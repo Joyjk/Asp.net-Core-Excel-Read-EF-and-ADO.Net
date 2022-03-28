@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TryFirstWorkApi", "TryFirst
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FIK.DAL", "FIK.DAL\FIK.DAL.csproj", "{13699532-56B5-4B7C-BFEB-348652B92E61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestingDemo", "UnitTestingDemo\UnitTestingDemo.csproj", "{A6A358EA-7E03-41D5-86A2-B3C5F79B8FAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{13699532-56B5-4B7C-BFEB-348652B92E61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13699532-56B5-4B7C-BFEB-348652B92E61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13699532-56B5-4B7C-BFEB-348652B92E61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6A358EA-7E03-41D5-86A2-B3C5F79B8FAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6A358EA-7E03-41D5-86A2-B3C5F79B8FAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6A358EA-7E03-41D5-86A2-B3C5F79B8FAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6A358EA-7E03-41D5-86A2-B3C5F79B8FAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
