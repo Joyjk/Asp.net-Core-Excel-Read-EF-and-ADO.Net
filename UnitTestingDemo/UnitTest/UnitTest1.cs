@@ -95,8 +95,17 @@ namespace UnitTestingDemo
 
                     var product =  JsonConvert.DeserializeObject<List<Product>>(data);
 
-                    Assert.AreEqual(5008, product.Count);
-                    
+                   // Assert.AreEqual(5008, product.Count);
+
+                    int count = 0;
+                    foreach (var item in product)
+                    {
+                        if(item.BarCode == "n1ihil")
+                        {
+                            count = 1;
+                        }
+                    }
+                    Assert.AreEqual(1, count);
 
                    
                     
