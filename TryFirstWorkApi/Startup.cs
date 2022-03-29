@@ -38,7 +38,8 @@ namespace TryFirstWorkApi
 
             services.AddScoped<IDapper, Dapperr>();
 
-            services.AddCors(options => options.AddDefaultPolicy(builder => builder.AllowAnyOrigin()));
+            services.AddCors(options => options.AddDefaultPolicy(builder => builder
+                                                                            .AllowAnyOrigin()));
 
             services.AddHttpContextAccessor();
 
@@ -81,7 +82,10 @@ namespace TryFirstWorkApi
 
             app.UseRouting();
 
-            app.UseCors();
+            app.UseCors(x=>x.AllowAnyMethod()
+                             .AllowAnyHeader()
+                             .SetIsOriginAllowed(origin=>true)
+                             .AllowCredentials());
 
             app.UseAuthorization();
             

@@ -304,5 +304,16 @@ namespace TryFirstWorkApi.Controllers
 
             return Ok(details);
         }
+
+        [HttpPost("added")]
+        public ActionResult DemoTbl([FromBody] DemoTbl demoTbl)
+        {
+            dbContext.DemoTbls.Add(demoTbl);
+            dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+
     }
 }

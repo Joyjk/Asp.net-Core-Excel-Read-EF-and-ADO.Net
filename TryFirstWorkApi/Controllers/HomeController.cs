@@ -150,6 +150,12 @@ namespace TryFirstWorkApi.Controllers
             //connection.Close();
             return list;
         }
+
+
+        //public IActionResult PostData()
+        //{
+        //    return Ok();
+        //}
        
 
     }

@@ -103,12 +103,12 @@ namespace UnitTestingDemo
                     int count = 0;
                     foreach (var item in products)
                     {
-                        if(item.BarCode == "n1ihil")
+                        if(item.BarCode == "nihil")
                         {
                             count = 1;
                         }
                     }
-                    // Assert.AreEqual(1, count);
+                     Assert.AreEqual(1, count);
 
                     Assert.AreEqual(statusCode, System.Net.HttpStatusCode.OK);
 
